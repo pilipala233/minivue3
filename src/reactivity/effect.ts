@@ -1,9 +1,12 @@
+import { extend } from "./shared";
 
 
 
 class ReactiveEffect{
   private _fn:any;
   deps = []
+  active = true;
+  onStop?:() => void;
   constructor(fn, public scheduler){
     this._fn = fn;
   }
@@ -13,10 +16,15 @@ class ReactiveEffect{
 
   }
   stop(){
-    this.deps.forEach((dep:any) => {
-      //为什么这里这么写就可以删除全局targetMap中的dep,是因为activeEffect.deps.push的时候是整个引用，所以这里删除的时候也是删除的全局的targetMap中的dep
-      dep.delete(this);
-    });
+
+    if(this.active){
+      cleanupEffect(this);
+      if(this.onStop){
+        this.onStop();
+      }
+      this.active = false;
+    }
+
   }
 
 }
@@ -37,8 +45,16 @@ export function track(target,key){
   }
 //   if(dep.has(activeEffect)) return;
    dep.add(activeEffect);
-   //这里是有问题的，存在依赖收集冗余。因为每次effect执行的时候都会执行一次track，所以会存在重复的依赖收集
+   //todo,这里是有问题的，存在依赖收集冗余。因为每次effect执行的时候都会执行一次track，所以会存在重复的依赖收集
+   if(!activeEffect)return
    activeEffect.deps.push(dep);
+}
+
+function cleanupEffect(effect){
+  effect.deps.forEach((dep:any) => {
+    dep.delete(effect);
+  });
+
 }
 export function trigger(target,key){
     let depsMap = targetMap.get(target);
@@ -59,6 +75,9 @@ export function effect(fn,options: any= {}){
   
   const _effect = new ReactiveEffect(fn,options.scheduler);
 
+  // 把用户传过来的值合并到 _effect 对象上去
+  // 缺点就是不是显式的，看代码的时候并不知道有什么值
+  extend(_effect, options);
 
   _effect.run();
   const runner:any = _effect.run.bind(_effect);

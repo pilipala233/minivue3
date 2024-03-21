@@ -2,7 +2,7 @@ import {effect,stop} from "../effect";
 import { reactive } from '../reactive' 
 
 describe('effect', () => {
-    it.skip('happy path', () => {
+    it('happy path', () => {
 		const user = reactive({
 			age: 10
 		})  
@@ -16,7 +16,7 @@ describe('effect', () => {
 
     })
 
-	it.skip('should return runner when call effect', () => {
+	it('should return runner when call effect', () => {
 		// 1.effect(fn) -> function (runner) -> fn -> return 
 		let foo = 10;
 		const runner = effect(() => {
@@ -30,7 +30,7 @@ describe('effect', () => {
 	
 	})
 
-	it.skip("scheduler", () => {
+	it("scheduler", () => {
 	//1.通过effect 的第二个参数给定的一个scheduler 的fn
 	//2.effect第一次执行时，还会执行fn
 	//3.当响应式对象 set update 不会执行fn而是执行 scheduler
@@ -77,5 +77,20 @@ describe('effect', () => {
 		// stopped effect should still be manually callable
 		 runner();
 		 expect(dummy).toBe(3);
-	  }); 
+	}); 
+	
+	it("onStop",() => {
+		const obj = reactive({
+		  foo: 1,
+		});
+		const onStop = jest.fn();
+		let dummy;
+		const runner = effect(() => {
+		  dummy = obj.foo;
+		}, {
+		  onStop,
+		});
+		stop(runner);
+		expect(onStop).toBeCalledTimes(1);
+	})
 })
