@@ -3,7 +3,7 @@
 
 class ReactiveEffect{
   private _fn:any;
-
+  deps = []
   constructor(fn, public scheduler){
     this._fn = fn;
   }
@@ -12,7 +12,12 @@ class ReactiveEffect{
     return this._fn()
 
   }
-
+  stop(){
+    this.deps.forEach((dep:any) => {
+      //为什么这里这么写就可以删除全局targetMap中的dep,是因为activeEffect.deps.push的时候是整个引用，所以这里删除的时候也是删除的全局的targetMap中的dep
+      dep.delete(this);
+    });
+  }
 
 }
 
@@ -32,7 +37,8 @@ export function track(target,key){
   }
 //   if(dep.has(activeEffect)) return;
    dep.add(activeEffect);
-//   activeEffect.deps.push(dep);
+   //这里是有问题的，存在依赖收集冗余。因为每次effect执行的时候都会执行一次track，所以会存在重复的依赖收集
+   activeEffect.deps.push(dep);
 }
 export function trigger(target,key){
     let depsMap = targetMap.get(target);
@@ -55,6 +61,11 @@ export function effect(fn,options: any= {}){
 
 
   _effect.run();
-  return  _effect.run.bind(_effect)
+  const runner:any = _effect.run.bind(_effect);
+  runner.effect = _effect
+  return  runner
 }
 
+export function stop(runner){
+  runner.effect.stop();
+}
