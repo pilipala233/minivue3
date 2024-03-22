@@ -1,6 +1,6 @@
 import { extend } from "./shared";
-
-
+let activeEffect;
+let shouldTrack;
 
 class ReactiveEffect{
   private _fn:any;
@@ -11,8 +11,22 @@ class ReactiveEffect{
     this._fn = fn;
   }
   run(){
-    activeEffect = this;
-    return this._fn()
+   
+    //1.会收集依赖
+    // shouldTrack  做区分
+    
+    if(!this.active){
+      //执行过stop会跑这个
+      return this._fn()
+    }else {
+      activeEffect = this;
+      //console.dir(activeEffect._fn)
+      shouldTrack = true;
+      const result = this._fn();
+      shouldTrack = false;
+      return result;
+    }
+
 
   }
   stop(){
@@ -31,7 +45,8 @@ class ReactiveEffect{
 
 const targetMap = new Map();
 export function track(target,key){
-  
+  if(!isTracking())return
+
   // target -> key -> dep
   let depsMap = targetMap.get(target);
   if(!depsMap){
@@ -43,18 +58,24 @@ export function track(target,key){
     dep = new Set();
     depsMap.set(key,dep)
   }
-//   if(dep.has(activeEffect)) return;
+
+
+  if(dep.has(activeEffect)) return;
    dep.add(activeEffect);
-   //todo,这里是有问题的，存在依赖收集冗余。因为每次effect执行的时候都会执行一次track，所以会存在重复的依赖收集
-   if(!activeEffect)return
+  
+   
    activeEffect.deps.push(dep);
+}
+
+function isTracking(){
+  return shouldTrack && activeEffect !== undefined;
 }
 
 function cleanupEffect(effect){
   effect.deps.forEach((dep:any) => {
     dep.delete(effect);
   });
-
+  effect.deps.length = 0;
 }
 export function trigger(target,key){
     let depsMap = targetMap.get(target);
@@ -69,7 +90,7 @@ export function trigger(target,key){
       
     }
 }
-let activeEffect;
+
 export function effect(fn,options: any= {}){
   //fn
   

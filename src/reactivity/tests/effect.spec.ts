@@ -63,17 +63,26 @@ describe('effect', () => {
 
 	it("stop",() => {
 		let dummy;
+		console.log('hhaha')
 		const obj = reactive({prop: 1});
 		const runner = effect(() => {
 		  dummy = obj.prop;
+		  console.log('111')
 		});
+
 		obj.prop = 2;
 		expect(dummy).toBe(2);
 		stop(runner);
+		
+		// effect(() => {
+		// 	console.log('233')
+		//   });
 		// obj.prop = 3;
 		// 
-		obj.prop=3
-		expect(dummy).toBe(2);
+		console.log("===")
+		obj.prop++
+		console.log("===")
+		expect(dummy).toBe(2); 
 		// stopped effect should still be manually callable
 		 runner();
 		 expect(dummy).toBe(3);
