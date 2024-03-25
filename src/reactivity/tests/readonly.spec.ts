@@ -1,4 +1,4 @@
-import { isReadonly, readonly} from '../reactive'
+import { isProxy, isReadonly, readonly} from '../reactive'
 describe("readonly", () => {
   it("happy path", () => {
     // not set
@@ -10,6 +10,8 @@ describe("readonly", () => {
     expect(isReadonly(original)).toBe(false);
     expect(isReadonly(original.bar)).toBe(false);
     expect(wrapped.foo).toBe(1)
+    expect(isProxy(wrapped)).toBe(true)
+    expect(isProxy(original)).toBe(false)
   })
   it('warn then call set', () => {
     const user = readonly({
