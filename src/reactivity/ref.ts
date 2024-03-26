@@ -8,6 +8,7 @@ export class RefImpl {
   private _value: any;
   public dep;
   private _rawValue
+  public _v_isRef = true;
   constructor(value) {
     this._rawValue = value;
     this._value = convert(value) ;
@@ -59,13 +60,13 @@ export function proxyRefs(objectWithRefs) {
   
 }
 
-// 把 ref 里面的值拿到
+
 export function unRef(ref) {
-  
+  return isRef(ref) ? ref.value : ref;
 }
 
-export function isRef(value) {
-  
+export function isRef(ref) {
+  return !!ref._v_isRef
 }
 
 
