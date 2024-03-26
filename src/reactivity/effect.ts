@@ -59,15 +59,11 @@ export function track(target,key){
     depsMap.set(key,dep)
   }
 
+  trackEffects(dep)
 
-  if(dep.has(activeEffect)) return;
-   dep.add(activeEffect);
-  
-   
-   activeEffect.deps.push(dep);
 }
 
-function isTracking(){
+export function isTracking(){
   return shouldTrack && activeEffect !== undefined;
 }
 
@@ -77,18 +73,29 @@ function cleanupEffect(effect){
   });
   effect.deps.length = 0;
 }
+export function trackEffects(dep){
+  if(dep.has(activeEffect)) return;
+   dep.add(activeEffect);
+  
+   
+   activeEffect.deps.push(dep);
+}
 export function trigger(target,key){
     let depsMap = targetMap.get(target);
-    let dep = depsMap.get(key);
-    for(const effect of dep){
+    let deps = depsMap.get(key);
+    triggerEffects(deps)
+}
 
-      if(effect.scheduler){
-        effect.scheduler();
-      } else {
-        effect.run();
-      }
-      
+export function triggerEffects(deps){
+  for(const effect of deps){
+
+    if(effect.scheduler){
+      effect.scheduler();
+    } else {
+      effect.run();
     }
+    
+  }
 }
 
 export function effect(fn,options: any= {}){
