@@ -56,8 +56,28 @@ export function ref(value) {
   return new RefImpl(value);
 }
 
+const shallowUnwrapHandlers = {
+  get(target, key, receiver) {
+    // 如果里面是一个 ref 类型的话，那么就返回 .value
+    // 如果不是的话，那么直接返回value 就可以了
+    return unRef(Reflect.get(target, key, receiver));
+  },
+  set(target, key, value, receiver) {
+    const oldValue = target[key];
+    //旧值是ref类型，新值不是ref类型
+    if (isRef(oldValue) && !isRef(value)) {
+      return (target[key].value = value);
+    } else {
+      return Reflect.set(target, key, value, receiver);
+    }
+  },
+};
+
+// 这里没有处理 objectWithRefs 是 reactive 类型的时候
+// TODO reactive 里面如果有 ref 类型的 key 的话， 那么也是不需要调用 ref.value 的
+// （but 这个逻辑在 reactive 里面没有实现）
 export function proxyRefs(objectWithRefs) {
-  
+  return new Proxy(objectWithRefs, shallowUnwrapHandlers);
 }
 
 

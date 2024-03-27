@@ -39,7 +39,7 @@ describe("ref", () => {
     expect(dummy).toBe(2);
   });
 
-  it.skip("proxyRefs", () => {
+  it("proxyRefs", () => {
     const user = {
       age: ref(10),
       name: "xiaohong",
@@ -58,7 +58,7 @@ describe("ref", () => {
     expect(user.age.value).toBe(10);
   });
 
-  it.skip("isRef", () => {
+  it("isRef", () => {
     const a = ref(1);
     const user = reactive({
       age: 1,
