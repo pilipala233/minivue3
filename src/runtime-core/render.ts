@@ -57,7 +57,13 @@ function moutElement(vnode: any, container: any) {
     const {props} = vnode;
     for(const key in props){
         const value = props[key];
-        el.setAttribute(key, value);
+        const isOn = (key)=>/^on[A-z]/.test(key);
+        if(isOn(key)){
+            el.addEventListener(key.slice(2).toLowerCase(),value);
+        }else{
+            el.setAttribute(key, value);
+        }
+        
     }
 
     container.append(el);
