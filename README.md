@@ -1,5 +1,6 @@
 # minivue3
-一个跟着催学社学vue3源码的练习项目，目标是打造一个minivue
+ - 一个跟着催学社学vue3源码的练习项目，目标是打造一个minivue。
+ - 本仓库代码基本跟着教程编写，内部的功能实现细节与广度不及mini-vue代码。
 
 
 ### Tasking
@@ -9,10 +10,9 @@
 - [x] 支持组件类型
 - [x] 支持 element 类型
 - [x] 初始化 props
-- [ ] setup 可获取 props 和 context
+- [x] setup 可获取 props 
 - [x] 支持 component emit
-- [ ] 支持 proxy
-- [x] 可以在 render 函数中获取 setup 返回的对象
+- [ ] 可以在 render 函数中获取 setup 返回的对象
 - [ ] nextTick 的实现
 - [ ] 支持 getCurrentInstance
 - [ ] 支持 provide/inject
@@ -118,5 +118,5 @@
 52. 实现编译 template 成 render 函数
 
 
-课程内部包含了 vue3 的三大核心模块：reactivity、runtime 以及 compiler 模块
+代码包含了 vue3 的三大核心模块：reactivity、runtime 以及 compiler 模块
 
