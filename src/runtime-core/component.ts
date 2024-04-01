@@ -1,14 +1,18 @@
 import { shallowReadonly } from "../reactivity/reactive";
 import { initProps } from "./componentProps";
 import { PublicInstanceProxyHandlers } from "./componentPublicInstance";
+import { emit } from "./componentsEmit";
 
 export function createComponentInstance(vnode){
     const component = {
         vnode,
         type: vnode.type,
         props:{},
-        setupState:{}
+        setupState:{},
+        emit:()=>{}
     }
+   //闭包，虽然目前component是一个空对象，但是后续会被赋值
+    component.emit =emit.bind(null,component) as any
     return  component 
 }
 export function setupComponent(instance){
@@ -31,7 +35,7 @@ function setupStatefulComponent(instance) {
         //setup返回值 可能是function 也可能是对象,如果是对象，那么就是setup的返回值，如果是函数，那么就是render函数
 
 
-        const setupResult = setup(shallowReadonly(instance.props));
+        const setupResult = setup(shallowReadonly(instance.props),{emit:instance.emit});
         handleSetupResult(instance,setupResult)
     }
 }
