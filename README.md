@@ -19,8 +19,7 @@
 - [ ] 支持最基础的 slots
 - [ ] 支持 Text 类型节点
 - [x] 支持 $el api
-- [ ] 支持 watch
-- [ ] 支持 watchEffect
+
 
 
 #### reactivity
@@ -42,7 +41,8 @@
 - [x] 支持 isProxy
 - [x] 支持 shallowReadonly
 - [x] 支持 proxyRefs
-
+- [ ] 支持 watch
+- [ ] 支持 watchEffect
 ### compiler-core
 - [ ] 解析插值
 - [ ] 解析 element
@@ -52,7 +52,7 @@
 - [ ] 支持 custom renderer 
 
 ### runtime-test
-- [x] 支持测试 runtime-core 的逻辑
+- [ ] 支持测试 runtime-core 的逻辑
 
 
 ### example
