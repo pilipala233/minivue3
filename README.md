@@ -18,7 +18,8 @@
 - [ ] 支持 provide/inject
 - [ ] 支持最基础的 slots
 - [ ] 支持 Text 类型节点
-- [ ] 支持 $el api
+- [x] 支持 $el api
+- [ ] 支持 watch
 - [ ] 支持 watchEffect
 
 
@@ -51,19 +52,12 @@
 - [ ] 支持 custom renderer 
 
 ### runtime-test
-- [ ] 支持测试 runtime-core 的逻辑
+- [x] 支持测试 runtime-core 的逻辑
 
-### infrastructure
-- [ ] support monorepo with pnpm
-### build
-
-```shell
-pnpm build
-```
 
 ### example
 
-通过 server 的方式打开 packages/vue/example/\* 下的 index.html 即可
+通过 server 的方式打开 example/\* 下的 index.html 即可
 
 
 ### 从零到一实现一遍
@@ -122,7 +116,7 @@ pnpm build
 50. 实现代码生成插值类型
 51. 实现代码生成三种联合类型
 52. 实现编译 template 成 render 函数
-53. 实现 monorepo & 使用 vitest 替换 jest 
+
 
 课程内部包含了 vue3 的三大核心模块：reactivity、runtime 以及 compiler 模块
 
