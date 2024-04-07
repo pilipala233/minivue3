@@ -13,7 +13,7 @@
 - [x] 初始化 props
 - [x] setup 可获取 props 
 - [x] 支持 component emit
-- [ ] 可以在 render 函数中获取 setup 返回的对象
+- [x] 可以在 render 函数中获取 setup 返回的对象
 - [ ] nextTick 的实现
 - [ ] 支持 getCurrentInstance
 - [ ] 支持 provide/inject

@@ -4,11 +4,11 @@ import {Foo} from './foo.js'
 export const App ={
     name:'App',
     render(){
-        window.self=this
+       window.self=this
         return h("div", {
             id:'root',
             class: ['red','hard'],
-            onClick:()=>{console.log('click')},
+            onClick:()=>{console.log('click',this.msg)},
             onmousedown:()=>{console.log('mousedown')},
         },
         [h("div",{},'hi'+this.msg),h(Foo,{count:1}),])
