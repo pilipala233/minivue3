@@ -1,6 +1,7 @@
 # minivue3
- - 一个跟着催学社学vue3源码的练习项目，目标是打造一个minivue。
- - 本仓库代码基本跟着教程编写，内部的功能实现细节与广度不及mini-vue代码。
+ - 一个跟着催学社学vue3源码的练习项目，目标是打造一个自己的mini-vue。
+ - 本仓库代码基本跟着教程编写，以学习和理解思想为主，所以内部的功能实现细节与广度不及mini-vue。
+ - 部分功能点的代码实现以较为复杂的目标开发，缺少对多种情况的判断和细化，比如slots实现以具名作用域插槽为开发目标
 
 
 ### Tasking
@@ -16,7 +17,7 @@
 - [ ] nextTick 的实现
 - [ ] 支持 getCurrentInstance
 - [ ] 支持 provide/inject
-- [ ] 支持最基础的 slots
+- [x] 支持最基础的 slots
 - [ ] 支持 Text 类型节点
 - [x] 支持 $el api
 
@@ -50,10 +51,6 @@
 
 ### runtime-dom
 - [ ] 支持 custom renderer 
-
-### runtime-test
-- [ ] 支持测试 runtime-core 的逻辑
-
 
 ### example
 
