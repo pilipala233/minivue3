@@ -70,6 +70,7 @@ function moutElement(vnode: any, container: any) {
 }
 
 function mountChildren(vnode, container) {
+    debugger
     vnode.children.forEach(child => {
         patch(child, container);
     });
