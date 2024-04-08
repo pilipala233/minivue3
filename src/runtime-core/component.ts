@@ -29,6 +29,7 @@ export function setupComponent(instance){
 }
 
 function setupStatefulComponent(instance) {
+    setCurrentInstance(instance);
     //拿到配置
     const component = instance.type;
     //ctx
@@ -61,7 +62,13 @@ function finishComponentSetup(instance: any) {
         instance.render = Component.render;
     }
 }
-
+let currentInstance = null
+export function getCurrentInstance(){
+    return currentInstance
+}
+function setCurrentInstance(instance){
+    currentInstance = instance
+}
 
 
 
