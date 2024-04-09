@@ -4,14 +4,17 @@ import { PublicInstanceProxyHandlers } from "./componentPublicInstance";
 import { initSlots } from "./componentSlots";
 import { emit } from "./componentsEmit";
 
-export function createComponentInstance(vnode){
+export function createComponentInstance(vnode, parent){
+    console.log('vnode',parent)
     const component = {
         vnode,
         type: vnode.type,
         props:{},
         setupState:{},
         slots:{},
-        emit:()=>{}
+        emit:()=>{},
+        parent,
+        provides:parent?parent.provides:{},
     }
    //闭包，虽然目前component是一个空对象，但是后续会被赋值
     component.emit =emit.bind(null,component) as any
