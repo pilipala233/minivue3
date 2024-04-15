@@ -1,8 +1,18 @@
 import { ShapeFlags } from "../shared/shapeFlags";
 import { createComponentInstance, setupComponent } from "./component";
+import { createAppAPI } from "./createApp";
 import { Fragment,Text } from "./vnode";
+export function createRender(options) {
 
-export function render(vnode, container) {
+    const {
+        createElement,
+        patchProp,
+        insert,
+    } = options
+
+
+
+ function render(vnode, container) {
     //patch
     patch(vnode, container,null);
 }
@@ -58,7 +68,8 @@ function processElement(vnode: any, container: any,parentComponent) {
 }
 
 function moutElement(vnode: any, container: any,parentComponent) {
-    const el =vnode.el= document.createElement(vnode.type);
+     
+    const el =vnode.el= createElement(vnode.type);
     const {children}    = vnode;
     if(ShapeFlags.TEXT_CHILDREN & vnode.shapeFlag){
         el.textContent = children;
@@ -70,17 +81,20 @@ function moutElement(vnode: any, container: any,parentComponent) {
     
     const {props} = vnode;
     for(const key in props){
+        
         const value = props[key];
-        const isOn = (key)=>/^on[A-z]/.test(key);
-        if(isOn(key)){
-            el.addEventListener(key.slice(2).toLowerCase(),value);
-        }else{
-            el.setAttribute(key, value);
-        }
+        // const isOn = (key)=>/^on[A-z]/.test(key);
+        // if(isOn(key)){
+        //     el.addEventListener(key.slice(2).toLowerCase(),value);
+        // }else{
+        //     el.setAttribute(key, value);
+        // }
+        patchProp(el,key,value)
         
     }
 
-    container.append(el);
+   // container.append(el);
+   insert(el,container)
 }
 
 function mountChildren(vnode, container,parentComponent) {
@@ -99,3 +113,7 @@ function processText(vnode: any, container: any) {
     container.append(textNode);
 }
 
+return {
+    createApp:createAppAPI(render)
+}
+}
