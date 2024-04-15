@@ -50,7 +50,7 @@
 - [ ] 解析 text
 
 ### runtime-dom
-- [ ] 支持 custom renderer 
+- [x] 支持 custom renderer 
 
 ### example
 
