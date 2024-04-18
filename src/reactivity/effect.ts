@@ -81,12 +81,14 @@ export function trackEffects(dep){
    activeEffect.deps.push(dep);
 }
 export function trigger(target,key){
+ 
     let depsMap = targetMap.get(target);
     let deps = depsMap.get(key);
     triggerEffects(deps)
 }
 
 export function triggerEffects(deps){
+
   for(const effect of deps){
 
     if(effect.scheduler){

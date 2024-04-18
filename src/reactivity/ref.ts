@@ -14,7 +14,7 @@ export class RefImpl {
     this._value = convert(value) ;
 
     this.dep = new Set();
-  }
+  }r
 
   get value() {
     // 收集依赖 

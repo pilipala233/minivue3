@@ -1,3 +1,4 @@
+import { proxyRefs } from "../reactivity";
 import { shallowReadonly } from "../reactivity/reactive";
 import { initProps } from "./componentProps";
 import { PublicInstanceProxyHandlers } from "./componentPublicInstance";
@@ -14,6 +15,8 @@ export function createComponentInstance(vnode, parent){
         slots:{},
         emit:()=>{},
         parent,
+        subTree:{},
+        isMounted:false,
         provides:parent?parent.provides:{},
     }
    //闭包，虽然目前component是一个空对象，但是后续会被赋值
@@ -51,7 +54,7 @@ function handleSetupResult(instance,setupResult: any) {
         //todo,setup返回的是render函数
     }else if(typeof setupResult === 'object'){
         //setup返回的是对象
-        instance.setupState = setupResult;
+        instance.setupState = proxyRefs(setupResult);
 
     }
     finishComponentSetup(instance)
