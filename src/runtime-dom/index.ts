@@ -2,12 +2,18 @@ import  {createRender} from '../runtime-core'
 function createElement(type) {
     return document.createElement(type);
 }
-function patchProp(el, key,value) {
-     const isOn = (key)=>/^on[A-z]/.test(key);
+function patchProp(el, key,preVal,nextValue) {
+ 
+    const isOn = (key)=>/^on[A-z]/.test(key);
     if(isOn(key)){
-        el.addEventListener(key.slice(2).toLowerCase(),value);
+        el.addEventListener(key.slice(2).toLowerCase(),nextValue);
     }else{
-        el.setAttribute(key, value);
+        if(nextValue === null||nextValue === undefined){
+            el.removeAttribute(key);
+        }else{
+            el.setAttribute(key, nextValue);
+        }
+        
     }
 }
 function insert(el, container) {

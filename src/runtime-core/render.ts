@@ -3,6 +3,7 @@ import { ShapeFlags } from "../shared/shapeFlags";
 import { createComponentInstance, setupComponent } from "./component";
 import { createAppAPI } from "./createApp";
 import { Fragment,Text } from "./vnode";
+import { Empty_OBJ } from "../shared";
 export function createRender(options) {
 
     const {
@@ -92,6 +93,28 @@ function patchElement(n1,n2, container){
     console.log("patchElement")
     console.log(n1)
     console.log(n2)
+   
+    const oldProps = n1.props||Empty_OBJ;
+    const newProps = n2.props||Empty_OBJ;
+    const el = n2.el = n1.el;
+    patchProps( el,oldProps,newProps);
+}
+function patchProps(el,oldProps,newProps){
+    if(oldProps === newProps) return;
+    for(const key in newProps){
+        const prev = oldProps[key];
+        const next = newProps[key];
+        if(prev !== next){
+            patchProp(el,key,prev,next)
+        }
+    }
+    if(oldProps===Empty_OBJ) return;
+    for(const key in oldProps){
+        if(!(key in newProps)){
+            patchProp(el,key,oldProps[key],null)
+        }
+    }
+
 }
 function moutElement(vnode: any, container: any,parentComponent) {
      
@@ -115,7 +138,7 @@ function moutElement(vnode: any, container: any,parentComponent) {
         // }else{
         //     el.setAttribute(key, value);
         // }
-        patchProp(el,key,value)
+        patchProp(el,key,null,value)
         
     }
 
