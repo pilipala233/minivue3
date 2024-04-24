@@ -16,11 +16,20 @@ function patchProp(el, key,preVal,nextValue) {
         
     }
 }
-function insert(el, container) {
-    container.append(el);
+function insert(el, container,anchor) {
+    container.insertBefore(el,anchor||null);
+}
+function remove(child) {
+    const parent = child.parentNode;
+    if (parent) {
+        parent.removeChild(child);
+    }
 }
 
-const render:any = createRender({createElement,patchProp, insert});
+function setElementText(el: any, text: any) {
+    el.textContent = text;
+}
+const render:any = createRender({createElement,patchProp, insert,remove,setElementText});
 
 export function createApp(...args) {
     return render.createApp(...args);
