@@ -5,3 +5,4 @@ export {createTextVnode} from './vnode';
 export {getCurrentInstance} from './component';
 export {provide, inject} from './apiInject';
 export {createRender} from './render'
+export { nextTick } from './scheduler'

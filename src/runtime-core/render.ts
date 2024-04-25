@@ -5,6 +5,7 @@ import { createAppAPI } from "./createApp";
 import { Fragment,Text } from "./vnode";
 import { Empty_OBJ } from "../shared";
 import { shouldUpdateComponent } from "./componentUpdateUtils";
+import { queueJobs } from "./scheduler";
 export function createRender(options) {
 
     const {
@@ -102,6 +103,11 @@ function setupRenderEffect(instance,vnode, container,anchor) {
             patch(prevSubTree,subTree, container,instance,anchor);
         }
        
+    }, {
+        scheduler() {
+            // console.log("update - scheduler ")
+            queueJobs(instance.update);
+        }
     })
 
 }
