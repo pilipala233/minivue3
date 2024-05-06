@@ -1,6 +1,6 @@
 
 
-export function transform(root, options?: any) {
+export function transform(root, options = {}) {
 
     const context = createTransformContext(root, options)
     //1.遍历 - 深度优先搜索
@@ -8,6 +8,7 @@ export function transform(root, options?: any) {
 
     //2. 修改 text content 
 
+    createRootCodegen(root);
 
 }
 
@@ -16,8 +17,8 @@ function traversNode(node: any, context) {
 
     const nodeTransforms = context.nodeTransforms;
     for (let i = 0; i < nodeTransforms.length; i++) {
-        const fn = nodeTransforms[i];
-        fn(node);
+        const transform = nodeTransforms[i];
+        transform(node);
 
     }
 
@@ -40,5 +41,9 @@ function createTransformContext(root: any, options: any) {
     }
 
     return context;
+}
+
+function createRootCodegen(root: any) {
+    root.codegenNode = root.children[0];
 }
 

@@ -6,6 +6,7 @@
   "module": "./lib/guide-mini-vue.esm.js",
   "scripts": {
     "test": "jest",
+    "updateSnapshot": "jest --updateSnapshot",
     "build": "rollup -c rollup.config.js --bundleConfigAsCjs --watch"
   },
   "author": "",
