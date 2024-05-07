@@ -6,7 +6,7 @@ export function transform(root, options = {}) {
 
     const context = createTransformContext(root, options)
     //1.遍历 - 深度优先搜索
-    traversNode(root, context);
+    traverseNode(root, context);
 
     //2. 修改 text content 
     createRootCodegen(root);
@@ -14,13 +14,15 @@ export function transform(root, options = {}) {
 
 }
 
-function traversNode(node: any, context) {
-
+function traverseNode(node: any, context) {
 
     const nodeTransforms = context.nodeTransforms;
+
+    const exitFns: any = [];
     for (let i = 0; i < nodeTransforms.length; i++) {
         const transform = nodeTransforms[i];
-        transform(node);
+        const onExit = transform(node, context);
+        if (onExit) exitFns.push(onExit);
     }
 
     switch (node.type) {
@@ -37,12 +39,17 @@ function traversNode(node: any, context) {
             break;
     }
 
+    let i = exitFns.length;
+    while (i--) {
+        exitFns[i]();
+    }
+
 }
 function traverseChildren(node: any, context: any) {
     const children = node.children;
     for (let i = 0; i < children.length; i++) {
         const node = children[i];
-        traversNode(node, context);
+        traverseNode(node, context);
     }
 }
 
@@ -60,6 +67,15 @@ function createTransformContext(root: any, options: any) {
 }
 
 function createRootCodegen(root: any) {
-    root.codegenNode = root.children[0];
+
+    const child = root.children[0];
+
+    if (child.type === NodeTypes.ELEMENT) {
+        root.codegenNode = child.codegenNode
+    } else {
+        root.codegenNode = root.children[0];
+    }
+
+    // root.codegenNode = root.children[0];
 }
 

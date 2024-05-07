@@ -17,13 +17,14 @@ function parseChildren(context, ancestors) {
     const nodes: any = [];
 
     while (!isEnd(context, ancestors)) {
+        //其实还需要解析props,minivue 并没有实现
         let node;
         const s = context.source;
         if (s.startsWith("{{")) {
             node = parseInterpolation(context);
         } else if (s[0] === "<") {
             if (/[a-z]/i.test(s[1])) {
-                // console.log("parse element ");
+          
                 node = parseElement(context, ancestors);
             }
         }
@@ -96,7 +97,8 @@ function advaceBy(context: any, length: number) {
 function createRoot(children: any) {
     return {
         children,
-        type: NodeTypes.ROOT
+        type: NodeTypes.ROOT,
+        helpers: []
     }
 }
 
@@ -116,9 +118,7 @@ function parseElement(context: any, ancestors) {
     ancestors.pop()
 
 
-    console.log("---------------");
-    console.log(element.tag);
-    console.log(context.source);
+
 
     if (startsWithEndTagOpen(context.source, element.tag)) {
         parseTag(context, TagType.End);
@@ -126,7 +126,7 @@ function parseElement(context: any, ancestors) {
         throw new Error(`缺少结束标签:${element.tag}`);
     }
 
-    console.log("------------------", context.source)
+
     return element;
 }
 
@@ -139,7 +139,7 @@ function startsWithEndTagOpen(source, tag) {
 
 function parseTag(context: any, type: TagType) {
     const match: any = /^<\/?([a-z]*)/i.exec(context.source);
-    console.log(match);
+   
     const tag = match[1];
     //2. 删除处理完成的代码
     advaceBy(context, match[0].length);
@@ -163,11 +163,7 @@ function parseText(context: any): any {
         if (index !== -1 && endIndex > index) {
             endIndex = index;
         }
-
     }
-
-
-
 
     const content = parseTextData(context, endIndex);
     return {

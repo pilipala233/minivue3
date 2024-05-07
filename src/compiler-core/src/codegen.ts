@@ -1,5 +1,6 @@
+import { isString } from "../../shared";
 import { NodeTypes } from "./ast";
-import { TO_DISPLAY_STRING, helperMapName } from "./runtimeHelpers";
+import { CREATE_ELEMENT_VNODE, TO_DISPLAY_STRING, helperMapName } from "./runtimeHelpers";
 
 
 export function generate(ast: any) {
@@ -8,8 +9,6 @@ export function generate(ast: any) {
     const { push } = context;
 
     genFunctionPreamble(ast, context);
-
-
 
     let code = "";
     code += "return"
@@ -59,14 +58,48 @@ function genNode(node: any, context: any) {
         case NodeTypes.SIMPLE_EXPRESSION:
             genExpression(node, context);
             break;
+
+        case NodeTypes.ELEMENT:
+            genElement(node, context)
+            break;
+
+        case NodeTypes.COMPOUND_EXPRESSION:
+            genCompoundExpression(node, context)
+            break;
         default:
             break;
     }
-
-
-
 }
 
+function genElement(node: any, context: any) {
+
+    const { push, helper } = context;
+    const { tag, children, props } = node;
+debugger
+    push(`${helper(CREATE_ELEMENT_VNODE)}(`);
+    genNodeList(genNullable([tag, props, children]), context);
+
+    // genNode(children, context);
+
+    push(")")
+}
+function genNodeList(nodes: any, context: any) {
+    const { push } = context;
+    for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+
+        if (isString(node)) {
+            push(node);
+        } else {
+            genNode(node, context);
+        }
+
+        if (i < nodes.length - 1) {
+            push(",")
+        }
+
+    }
+}
 
 function genText(node: any, context: any) {
     const { push } = context;
@@ -102,5 +135,25 @@ function genExpression(node: any, context: any) {
     const { push } = context;
 
     push(`${node.content}`);
+}
+
+function genCompoundExpression(node: any, context: any) {
+
+    const children = node.children;
+    const { push } = context;
+    for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        if (isString(child)) {
+
+            push(child);
+        } else {
+            genNode(child, context);
+        }
+    }
+}
+
+function genNullable(arg0: any[]) {
+
+    return arg0.map((arg) => arg || "null")
 }
 
