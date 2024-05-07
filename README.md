@@ -45,9 +45,9 @@
 - [ ] 支持 watch
 - [ ] 支持 watchEffect
 ### compiler-core
-- [ ] 解析插值
-- [ ] 解析 element
-- [ ] 解析 text
+- [x] 解析插值
+- [x] 解析 element
+- [x] 解析 text
 
 ### runtime-dom
 - [x] 支持 custom renderer 
