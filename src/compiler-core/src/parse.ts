@@ -96,6 +96,7 @@ function advaceBy(context: any, length: number) {
 function createRoot(children: any) {
     return {
         children,
+        type: NodeTypes.ROOT
     }
 }
 
