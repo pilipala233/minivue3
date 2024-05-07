@@ -80,7 +80,7 @@ function setupRenderEffect(instance,vnode, container,anchor) {
         if(!instance.isMounted){
             console.log('init')
             const {proxy} = instance;
-            const subTree = instance.subTree= instance.render.call(proxy);
+            const subTree = instance.subTree= instance.render.call(proxy,proxy);
             console.log('subTree',subTree)
             //vnode -> patch
             //vnode -> element -> mountele
@@ -96,7 +96,7 @@ function setupRenderEffect(instance,vnode, container,anchor) {
                 updateComponentPreRender(instance, next);
             }
             const {proxy} = instance;
-            const subTree =  instance.render.call(proxy);
+            const subTree =  instance.render.call(proxy,proxy);
             const prevSubTree = instance.subTree;
             instance.subTree = subTree;
     
